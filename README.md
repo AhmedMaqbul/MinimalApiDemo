@@ -52,7 +52,7 @@ Validators/
  └── UserValidator.cs        # Validation logic
 
 Endpoints/
- └── UserEndpoints.cs        # Route configuration and mapping
+ └── UserEndpoints.cs        # User route group and endpoint mapping
 
 Telemetry/
  └── OpenTelemetryExtensions.cs  # Observability setup
@@ -219,37 +219,53 @@ DELETE /api/v1/users/{id}
 - Easy to locate and maintain feature code
 - Scalable for adding new features
 
-### 4. Comprehensive Validation
+### 4. Route Group Mapping
+- `Program.cs` stays focused on application setup
+- User endpoint registration is done with `app.MapUserEndpoints()`
+- The common `/api/v1/users` prefix is defined inside `Endpoints/UserEndpoints.cs`
+- Individual feature endpoints are mapped to the shared `RouteGroupBuilder`
+
+```csharp
+app.MapUserEndpoints();
+```
+
+```csharp
+var group = app.MapGroup("/api/v1/users")
+    .WithName("Users")
+    .WithTags("Users");
+```
+
+### 5. Comprehensive Validation
 - Data annotations on entities
 - Custom validation logic in handlers
 - Detailed error messages
 - Type-safe validation
 
-### 5. Typed API Responses
+### 6. Typed API Responses
 - `.Produces<T>()` declarations
 - Explicit HTTP status codes
 - OpenAPI schema generation
 - Better IDE support and documentation
 
-### 6. API Versioning
+### 7. API Versioning
 - Routes support `/api/v1/` prefix
 - Ready for future versions (`/api/v2/`, etc.)
 - Backward compatibility support
 
-### 7. Swagger/OpenAPI Documentation
+### 8. Swagger/OpenAPI Documentation
 - Interactive API documentation
 - Try-it-out functionality
 - Schema validation
 - Accessible at application root (`/`)
 
-### 8. OpenTelemetry Integration
+### 9. OpenTelemetry Integration
 - Distributed tracing support
 - Metrics collection
 - Structured logging
 - Console exporter for development
 - Easy to add Jaeger, Datadog, etc. exporters
 
-### 9. Data Seeding
+### 10. Data Seeding
 - Separate `UserSeeder` class
 - Clean initial data setup
 - Easy to extend with more seed data
@@ -385,8 +401,8 @@ public class ProductRepository : Repository<Product>
 ```
 
 4. Create handlers following the pattern
-5. Map endpoints in `ProductEndpoints.cs`
-6. Register in `Program.cs`
+5. Map the feature endpoints in `ProductEndpoints.cs` with a common route group
+6. Register the feature group in `Program.cs`, for example `app.MapProductEndpoints()`
 
 ### Adding a New API Version
 
