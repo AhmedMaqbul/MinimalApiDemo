@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MinimalApiDemo.Data;
+﻿using MinimalApiDemo.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace MinimalApiDemo.Models;
 
